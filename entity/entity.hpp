@@ -10,7 +10,8 @@ namespace game_utils
 class entity_t {
 public:
   template <typename T>
-  entity_t(T&& obj): self_{std::make_shared<model_t<T>>(std::forward<T>(obj))} { }
+  entity_t(T&& obj): self_{std::make_unique<model_t<T>>(std::forward<T>(obj))} { }
+  // default copy/move operations
 
   friend void draw(const entity_t& e);
   friend void update(entity_t& e);
@@ -27,6 +28,7 @@ public:
 private:
   struct concept_t {
     virtual ~concept_t() = default;
+
     virtual void draw() const     = 0;
     virtual void update()         = 0;
     virtual bool is_alive() const = 0;
@@ -34,11 +36,11 @@ private:
   template <typename T>
   struct model_t : concept_t {
     model_t(T obj): entity_{std::move(obj)} { }
-    void update() override {
-      entity_.update();
-    }
     void draw() const override {
       entity_.draw();
+    }
+    void update() override {
+      entity_.update();
     }
     bool is_alive() const override {
       return entity_.is_alive();
@@ -46,7 +48,7 @@ private:
 
     T entity_;
   };
-  std::shared_ptr<concept_t> self_; // make a non-const shared_ptr so we can modify the contents
+  std::unique_ptr<concept_t> self_; // make a non-const unique_ptr so we can modify the contents
                                     // ie. not thread safe, need perhaps a different model or representation...
 };
 
