@@ -35,7 +35,7 @@ private:
   };
   template <typename T>
   struct model_t : concept_t {
-    model_t(T obj): entity_{std::move(obj)} { }
+    model_t(T obj): entity_(std::move(obj)) { }
     void draw() const override {
       entity_.draw();
     }

@@ -67,6 +67,11 @@ public:
     for (auto& e : entities_) game_utils::draw(e);
   }
 
+  template <typename EntityType, typename Func>
+  void for_each_in_group(Func&& f) {
+    for (auto& e : get_all<EntityType>()) f(*e);
+  }
+
 private:
   std::vector<entity_t> entities_;
 

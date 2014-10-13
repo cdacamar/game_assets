@@ -24,14 +24,27 @@ struct bar {
   bool is_alive() const { return false; } // die instantly
 };
 
+
+struct foobar {
+  void update() { }
+  void draw() const { std::cout<<"foobar!\n"; }
+  bool is_alive() const { return true; }
+};
+
 int main() {
-  game_utils::entity_manager<foo, bar> mgr;
+  game_utils::entity_manager<foo, bar, foobar> mgr;
   mgr.create<foo>();
   mgr.create<foo>();
   mgr.get_all<foo>().back()->i = 50; // set the last one
   mgr.get_all<foo>().back()->id = 1; // set the last one
   mgr.create<bar>();
   mgr.create<bar>("something awesome");
+  mgr.create<foobar>();
+  mgr.for_each_in_group<foo>(
+    [](auto& e) {
+      std::cout<<std::boolalpha<<e.is_alive()<<'\n';
+    }
+  );
 
   // emulate 10 frames
   for (int i = 0;i != 20;++i) {
