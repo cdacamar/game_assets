@@ -10,4 +10,4 @@ This library is heavily based on the cppcon talk: _"Quick game development with 
 
 * Type erased entity type, removing the need for inheritance
 * Compile time mapped entity groups, removing the need for both typeid and it's runtime overhead
-* More to come... oh yeah, clang wont compile this, I blame libc++
+* More to come!
