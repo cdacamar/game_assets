@@ -7,7 +7,7 @@ struct foo {
   int id = 0;
   
   void update() { i += 20; }
-  void draw() const { std::cout<<"foo: "<<id<<"value: "<<i<<'\n'; }
+  void draw(std::ostream& dc) const { dc<<"foo: "<<id<<"value: "<<i<<'\n'; }
   bool is_alive() const {
     if (i > 100) std::cout<<"foo: "<<id<<" died! at:"<<i<<'\n';
     return i < 100;
@@ -20,14 +20,14 @@ struct bar {
   bar(std::string str): s{std::move(str)} { }
 
   void update() { }
-  void draw() const { std::cout<<s<<'\n'; }
+  void draw(std::ostream& dc) const { dc<<s<<'\n'; }
   bool is_alive() const { return false; } // die instantly
 };
 
 
 struct foobar {
   void update() { }
-  void draw() const { std::cout<<"foobar!\n"; }
+  void draw(std::ostream& dc) const { dc<<"foobar!\n"; }
   bool is_alive() const { return true; }
 };
 
@@ -49,7 +49,7 @@ int main() {
   // emulate 20 frames
   for (int i = 0;i != 20;++i) {
     mgr.update();
-    mgr.draw();
+    mgr.draw(std::cout);
     mgr.refresh();
   }
 }

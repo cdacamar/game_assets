@@ -55,10 +55,11 @@ public:
     );
   }
 
-  void draw() const {
+  template <typename Context>
+  void draw(Context& dc) const {
     mpl::for_each_tuple_element(grouped_entities_,
-        [](auto& entity_list) {
-          for (auto& e : entity_list) e.draw();
+        [&](auto& entity_list)mutable{
+          for (auto& e : entity_list) e.draw(dc);
         }
     );
   }

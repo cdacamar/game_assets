@@ -8,6 +8,6 @@ This library is heavily based on the cppcon talk: _"Quick game development with 
 
 ## Features:
 
-* Type erased entity type, removing the need for inheritance
 * Compile time mapped entity groups, removing the need for both typeid and it's runtime overhead
+* Now able to work with any device context capture by reference!
 * More to come!
