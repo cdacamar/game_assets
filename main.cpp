@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <entity_handlers/entity_manager.hpp>
+#include <mpl/has_member.hpp>
 
 struct foo {
   int i = 10;
@@ -27,8 +28,11 @@ struct bar {
 
 struct foobar {
   void update() { }
-  void draw(std::ostream& dc) const { dc<<"foobar!\n"; }
+  void draw(std::ostream& dc){ dc<<"foobar!\n"; }
   bool is_alive() const { return true; }
+
+  template <typename T>
+  void draw(T&) const { }
 };
 
 int main() {
