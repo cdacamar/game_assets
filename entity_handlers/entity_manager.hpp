@@ -7,10 +7,9 @@
 #include <mpl/has_member.hpp>
 #include <mpl/tuple_utilities.hpp>
 
-GENERATE_HAS_MEMBER_FN(update, void(Class::*)())
-GENERATE_HAS_MEMBER_FN(is_alive, bool(Class::*)()const)
-GENERATE_HAS_TEMPLATE_MEMBER_FN(draw, void(Class::*), const)
-GENERATE_HAS_MEMBER_FN_ARG(draw, void(Class::*), const)
+GENERATE_HAS_MEMBER_FN(update)
+GENERATE_HAS_MEMBER_FN(is_alive)
+GENERATE_HAS_MEMBER_FN(draw)
 
 namespace game_utils
 {
@@ -29,7 +28,7 @@ public:
   }
 
   void refresh() {
-    static_assert( mpl::and_bools<mpl::has_member_fn_is_alive<EntityTypes>::value...>::value,
+    static_assert( mpl::and_bools<mpl::has_member_fn_is_alive<const EntityTypes, bool()>::value...>::value,
         "all entities must have bool (E::is_alive)()const" );
     mpl::for_each_tuple_element(grouped_entities_,
         [](auto& entity_list) {
@@ -57,7 +56,7 @@ public:
   }
 
   void update() {
-    static_assert( mpl::and_bools<mpl::has_member_fn_update<EntityTypes>::value...>::value,
+    static_assert( mpl::and_bools<mpl::has_member_fn_update<EntityTypes, void()>::value...>::value,
         "all entities must have void (E::update)()" );
     mpl::for_each_tuple_element(grouped_entities_,
         [](auto& entity_list) {
@@ -68,8 +67,7 @@ public:
 
   template <typename Context>
   void draw(Context& dc) const {
-    static_assert( mpl::and_bools<mpl::has_member_fn_arg_draw<EntityTypes, Context&>::value...>::value ||
-        mpl::and_bools<mpl::has_template_member_fn_draw<EntityTypes, Context&>::value...>::value,
+    static_assert( mpl::and_bools<mpl::has_member_fn_draw<const EntityTypes, void(Context&)>::value...>::value,
         "entities must have either: void (E::draw)(Context&) const OR template <typename T> void (E::draw)(Context&) const" );
     mpl::for_each_tuple_element(grouped_entities_,
         [&](auto& entity_list)mutable{
